@@ -4,13 +4,13 @@ from collections import deque
 
 def generate_processes(num_processes):
     """
-    Generate a list of processes with random arrival and burst times.
+    Gera uma lista de processos com tempos de chegada e burst aleatórios.
     """
     processes = []
     for pid in range(1, num_processes + 1):
         arrival_time = random.randint(0, 10)
         burst_time = random.randint(1, 10)
-        priority = random.randint(1, 3)  # Used for MLQ (3 levels)
+        priority = random.randint(1, 3)  # Usado para MLQ (3 níveis)
         processes.append({
             "pid": pid,
             "arrival_time": arrival_time,
@@ -20,16 +20,16 @@ def generate_processes(num_processes):
             "start_time": None,
             "completion_time": None
         })
-    return sorted(processes, key=lambda p: p["arrival_time"])  # Sort by arrival time
+    return sorted(processes, key=lambda p: p["arrival_time"])  # Ordena pelo tempo de chegada
 
 def round_robin(processes, time_quantum):
     """
-    Simulate Round Robin scheduling.
+    Simula o escalonamento Round Robin.
     """
     queue = deque()
     time = 0
     completed = []
-    processes = sorted(processes, key=lambda p: p["arrival_time"])  # Sort by arrival time
+    processes = sorted(processes, key=lambda p: p["arrival_time"])  # Ordena pelo tempo de chegada
     remaining_processes = processes[:]
     
     while remaining_processes or queue:
@@ -56,7 +56,7 @@ def round_robin(processes, time_quantum):
 
 def shortest_job_first(processes):
     """
-    Simulate Shortest Job First scheduling.
+    Simula o escalonamento Shortest Job First.
     """
     time = 0
     completed = []
@@ -68,7 +68,7 @@ def shortest_job_first(processes):
             ready_queue.append(remaining_processes.pop(0))
         
         if ready_queue:
-            ready_queue.sort(key=lambda p: p["burst_time"])  # Select shortest job
+            ready_queue.sort(key=lambda p: p["burst_time"])  # Seleciona o menor trabalho
             process = ready_queue.pop(0)
             process["start_time"] = time if process["start_time"] is None else process["start_time"]
             time += process["burst_time"]
@@ -80,32 +80,32 @@ def shortest_job_first(processes):
 
 def priority_scheduling(processes):
     """
-    Simulate Priority Scheduling (Non-Preemptive).
+    Simula o escalonamento por Prioridade (não-preemptivo).
     """
     processes.sort(key=lambda p: (p["priority"], p["arrival_time"]))
     return shortest_job_first(processes)
 
 def multilevel_queue_scheduler(processes, time_quantum):
     """
-    Simulate Multilevel Queue Scheduling with 3 Queues:
-    - Queue 1: Round Robin
-    - Queue 2: Shortest Job First
-    - Queue 3: Priority Scheduling
+    Simula o escalonamento Multilevel Queue com 3 Filas:
+    - Fila 1: Round Robin
+    - Fila 2: Shortest Job First
+    - Fila 3: Escalonamento por Prioridade
     """
-    queues = {1: [], 2: [], 3: []}  # Three priority levels
+    queues = {1: [], 2: [], 3: []}  # Três níveis de prioridade
     for process in processes:
         queues[process["priority"]].append(process)
     
     completed = []
-    completed.extend(round_robin(queues[1], time_quantum))  # Round Robin for Queue 1
-    completed.extend(shortest_job_first(queues[2]))  # SJF for Queue 2
-    completed.extend(priority_scheduling(queues[3]))  # Priority Scheduling for Queue 3
+    completed.extend(round_robin(queues[1], time_quantum))  # Round Robin para a Fila 1
+    completed.extend(shortest_job_first(queues[2]))  # SJF para a Fila 2
+    completed.extend(priority_scheduling(queues[3]))  # Escalonamento por Prioridade para a Fila 3
     
     return completed
 
 def calculate_metrics(processes):
     """
-    Calculate average waiting time, turnaround time, response time, and CPU utilization.
+    Calcula o tempo médio de espera, tempo de turnaround, tempo de resposta e utilização da CPU.
     """
     total_waiting_time = 0
     total_turnaround_time = 0
@@ -146,12 +146,19 @@ def main():
         "Multilevel Queue": multilevel_queue_scheduler(copy.deepcopy(processes), time_quantum)
     }
     
-    print("\nPerformance Metrics:")
+    print("\nMétricas de Desempenho:")
     for algo, scheduled_processes in algorithms.items():
         metrics = calculate_metrics(scheduled_processes)
         print(f"\n{algo}:")
         for key, value in metrics.items():
-            print(f"  {key.replace('_', ' ').title()}: {value:.2f}")
+            if key == "avg_waiting_time":
+                print(f"  Tempo médio de espera: {value:.2f}")
+            elif key == "avg_turnaround_time":
+                print(f"  Tempo médio de turnaround: {value:.2f}")
+            elif key == "avg_response_time":
+                print(f"  Tempo médio de resposta: {value:.2f}")
+            elif key == "cpu_utilization":
+                print(f"  Utilização da CPU: {value:.2f}%")
 
 if __name__ == "__main__":
     main()
