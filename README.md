@@ -1,49 +1,51 @@
-# Process Scheduling Simulation
+# scheduling-simulation
 
-This script simulates process scheduling to compare different scheduling
-algorithms based on performance metrics. The results may differ in each
-execution due to random process generation.
+Este script simula o escalonamento de processos para comparar diferentes
+algoritmos de escalonamento com base em métricas de desempenho. Os resultados
+podem variar em cada execução devido à geração aleatória de processos.
 
-## Prerequisites
+## Pré-requisitos
 
-Make sure you have Python installed on your system. You can check by running the following command:
+Certifique-se de que o Python esteja instalado no seu sistema. Você pode verificar executando o seguinte comando:
 
 ```
 python --version
 ```
 
-## Download the project
+## Download
 
 ```
-git clone https://github.com/IsaquePFerreira/process_scheduling
-```
-
-## Navigate to the Script Location
-
-Open a terminal or command prompt and change the directory to where the script is located:
-
-```
-cd process_scheduling
+git clone https://github.com/IsaquePFerreira/scheduling-simulation
 
 ```
 
-# Run the Script
+## Navegar até o Local do Script
 
-Execute the following command:
+Abra um terminal ou prompt de comando e mude o diretório para onde o script está localizado:
 
 ```
-python process_scheduling.py
+cd scheduling-simulation
+
+```
+
+# Run
+
+Execute o seguinte comando:
+
+```
+python main.py
 ```
 
 # Troubleshooting
 
-If you get a ModuleNotFoundError, ensure that Python is correctly installed and added to your system's PATH.
+Se você receber um erro de ModuleNotFoundError, certifique-se de que o Python
+está corretamente instalado e adicionado ao PATH do seu sistema.
 
-If the script does not execute, try running:
+Se o script não for executado, tente rodar:
 
 ```
-python3 process_scheduling.py
+python3 main.py
 ```
 
-(Some systems require python3 instead of python.)
+(Alguns sistemas requerem o comando python3 em vez de python.)
 
