@@ -22,11 +22,15 @@ def generate_processes(num_processes):
         })
     return sorted(processes, key=lambda p: p["arrival_time"])  # Ordena pelo tempo de chegada
 
+"""
+ALGORITMOS DE ESCALONAMENTO
+"""
+
 def round_robin(processes, time_quantum):
     """
     Simula o escalonamento Round Robin.
     """
-    queue = deque()
+    queue = deque() # criando uma fila vazia
     time = 0
     completed = []
     processes = sorted(processes, key=lambda p: p["arrival_time"])  # Ordena pelo tempo de chegada
