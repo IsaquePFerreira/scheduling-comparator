@@ -82,28 +82,49 @@ def shortest_job_first(processes):
             time += 1
     return completed
 
+
 def priority_scheduling(processes):
     """
-    Simula o escalonamento por Prioridade (não-preemptivo).
+    Simula o escalonamento por Prioridade (First Come, First Served).
     """
-    processes.sort(key=lambda p: (p["priority"], p["arrival_time"]))
-    return shortest_job_first(processes)
+    # Ordena os processos primeiro por prioridade (mais altos primeiro) e depois por tempo de chegada
+    processes.sort(key=lambda p: (p["priority"], p["arrival_time"]))  
+    
+    completed = []
+    time = 0
+    
+    for process in processes:
+        if process["start_time"] is None:
+            process["start_time"] = time
+        
+        time = max(time, process["arrival_time"])  # Assegurar que o processo é iniciado após a sua hora de chegada
+        time += process["burst_time"]
+        process["completion_time"] = time
+        completed.append(process)
+    
+    return completed
 
 def multilevel_queue_scheduler(processes, time_quantum):
     """
     Simula o escalonamento Multilevel Queue com 3 Filas:
     - Fila 1: Round Robin
     - Fila 2: Shortest Job First
-    - Fila 3: Escalonamento por Prioridade
+    - Fila 3: Escalonamento por Prioridade (FCFS)
     """
     queues = {1: [], 2: [], 3: []}  # Três níveis de prioridade
     for process in processes:
         queues[process["priority"]].append(process)
     
     completed = []
-    completed.extend(round_robin(queues[1], time_quantum))  # Round Robin para a Fila 1
-    completed.extend(shortest_job_first(queues[2]))  # SJF para a Fila 2
-    completed.extend(priority_scheduling(queues[3]))  # Escalonamento por Prioridade para a Fila 3
+    
+    # Fila 1 (Maior prioridade): Round Robin
+    completed.extend(round_robin(queues[1], time_quantum))
+    
+    # Fila 2 (Prioridade média): Shortest Job First
+    completed.extend(shortest_job_first(queues[2]))
+    
+    # Fila 3 (Menor prioridade): Prioridade (FCFS)
+    completed.extend(priority_scheduling(queues[3]))
     
     return completed
 
